@@ -1,21 +1,34 @@
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::prelude::*;
+use std::time::Instant;
 
-use serde_json::Value;
+use serde_json::{json, Value};
 
-fn flatten_json(value: &Value, index: &str, flat_map: &mut HashMap<String, String>) {
+fn flatten_json(value: &Value, index: &str, flat_map: &mut HashMap<String, Value>, b_sparse: &bool) {
     match value {
-        Value::Null => {}
-        Value::Bool(_) => {}
-        Value::Number(_) => {}
+        Value::Null => {
+            if !b_sparse {
+                let key = format!("{}", index);
+                flat_map.insert(key, Value::Null);
+            }
+        }
+        Value::Bool(val) => {
+            let key = format!("{}", index);
+            flat_map.insert(key, json!(*val));
+        }
+        Value::Number(val) => {
+            let key = format!("{}", index);
+            flat_map.insert(key, json!(val));
+        }
         Value::String(val) => {
-            flat_map.insert(index.to_owned(), val.to_owned());
+            let key = format!("{}", index);
+            flat_map.insert(key, json!(val));
         }
         Value::Array(arr) => {
             for (i, v) in arr.iter().enumerate() {
-                let idx = format!("{}[{}]", index, i);
-                flatten_json(v, &idx, flat_map);
+                let idx = format!("{}.{}", index, i);
+                flatten_json(v, &idx, flat_map, &b_sparse);
             }
         }
         Value::Object(obj) => {
@@ -25,29 +38,40 @@ fn flatten_json(value: &Value, index: &str, flat_map: &mut HashMap<String, Strin
                 } else {
                     format!("{}.{}", index, k)
                 };
-                flatten_json(v, &idx, flat_map);
+                flatten_json(v, &idx, flat_map, &b_sparse);
             }
         }
     }
 }
 
 fn main() -> std::io::Result<()> {
+    
+    // set the sparse variable: true = no null keys is value is null
+    let b_sparse:bool = true;
+
     // Read the JSON file into a string
-    let mut file = File::open("test_data/lambda_project_testdata_long.json")?;
+    let mut file = File::open("test_data/lambda_project_testdata_short_with_headerblock.json")?;
     let mut contents = String::new();
     file.read_to_string(&mut contents)?;
 
     // Parse the JSON string into a serde_json::Value
     let json: Value = serde_json::from_str(&contents)?;
 
-    // Flatten the JSON into a hash map of flattened keys and associated values
-    let mut flat_map: HashMap<String, String> = HashMap::new();
-    flatten_json(&json, "", &mut flat_map);
+    // time the flatten_json function
+    let start = Instant::now();
 
-    // Print the flattened hash map
-    for (key, value) in flat_map.iter() {
-        println!("{}: {}", key, value);
-    }
+    // Flatten the JSON into a HashMap of flattened keys and associated values
+    let mut flat_map: HashMap<String, Value> = HashMap::new();
+    flatten_json(&json, "", &mut flat_map, &b_sparse);
+
+    let duration = start.elapsed();
+
+    // Convert the HashMap to a serde_json::Value and write it to a file
+    let json_output = json!(flat_map);
+    let mut output_file = File::create("json_hash_output_short_rust.json")?;
+    output_file.write_all(serde_json::to_string_pretty(&json_output)?.as_bytes())?;
+
+    println!("duration: {:?}", duration);
 
     Ok(())
 }

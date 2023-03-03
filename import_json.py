@@ -77,7 +77,7 @@ def getValuesByKeys(p_dictOfElements, p_listOfKeys, p_listOfSubKeys):
 
 
 if __name__ == "__main__":
-    _test_json = json_rd('test_data/lambda_project_testdata_long.json')
+    _test_json = json_rd('test_data/lambda_project_testdata_short_with_headerblock.json')
 
     # _test_json = json_rd('/Users/gcattabriga/Downloads/escalatejson/experiment_bom_property_workflow_step_object_parameter.json')
     # print(test_json)
@@ -95,10 +95,10 @@ if __name__ == "__main__":
 
     _res = json_hash(_test_json, p_sparse=True)
     _end = time.time()
-    print(f'hashed json: {_res}')
+    # print(f'hashed json: {_res}')
     print(f'duration: {_end - _start}')
 
-    with open('json_hash_output_large.json', 'w') as f:
+    with open('json_hash_output_short_python.json', 'w') as f:
         json.dump(_res, f, indent=2)
 
     # [s.rsplit(".", 1)[0] for s in keyclaimtype]
