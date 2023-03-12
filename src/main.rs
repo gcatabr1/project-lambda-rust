@@ -1,77 +1,76 @@
 use std::collections::HashMap;
+use serde_json::{Value};
 use std::fs::File;
-use std::io::prelude::*;
+use std::io::Write;
 use std::time::Instant;
 
-use serde_json::{json, Value};
+fn flatten_json(json: Value, b_sparse: &bool) -> HashMap<String, String> {
+    let mut stack = vec![("".to_owned(), json)];    
+    let mut flattened = HashMap::new();
 
-fn flatten_json(value: &Value, index: &str, flat_map: &mut HashMap<String, Value>, b_sparse: &bool) {
-    match value {
-        Value::Null => {
-            if !b_sparse {
-                let key = format!("{}", index);
-                flat_map.insert(key, Value::Null);
+    while let Some((prefix, json)) = stack.pop() {
+        match json {
+            Value::Null => {
+                if !b_sparse {
+                    flattened.insert(prefix, "null".to_owned());
+                }
             }
-        }
-        Value::Bool(val) => {
-            let key = format!("{}", index);
-            flat_map.insert(key, json!(*val));
-        }
-        Value::Number(val) => {
-            let key = format!("{}", index);
-            flat_map.insert(key, json!(val));
-        }
-        Value::String(val) => {
-            let key = format!("{}", index);
-            flat_map.insert(key, json!(val));
-        }
-        Value::Array(arr) => {
-            for (i, v) in arr.iter().enumerate() {
-                let idx = format!("{}.{}", index, i);
-                flatten_json(v, &idx, flat_map, &b_sparse);
+            Value::Bool(b) => {
+                flattened.insert(prefix, b.to_string());
             }
-        }
-        Value::Object(obj) => {
-            for (k, v) in obj.iter() {
-                let idx = if index.is_empty() {
-                    k.to_owned()
-                } else {
-                    format!("{}.{}", index, k)
-                };
-                flatten_json(v, &idx, flat_map, &b_sparse);
+            Value::Number(n) => {
+                flattened.insert(prefix, n.to_string());
             }
+            Value::String(s) => {
+                flattened.insert(prefix, s.to_owned());
+            }
+            Value::Array(arr) => {
+                for (i, val) in arr.into_iter().enumerate() {
+                    stack.push((format!("{}.{}", prefix, i), val));
+                }
+            }
+            Value::Object(obj) => {
+                for (key, val) in obj.into_iter() {
+                    if !prefix.is_empty() {
+                        stack.push((format!("{}.{}", prefix, key), val));
+                    } else {
+                        stack.push((key, val));
+                    }  
+                }
+            }           
         }
     }
+
+    flattened
 }
 
 fn main() -> std::io::Result<()> {
-    
+    let input_file = "test_data/lambda_project_testdata_long.json";
+    let output_file = "json_hash_output_long_rust.json";
+
     // set the sparse variable: true = no null keys is value is null
     let b_sparse:bool = true;
 
-    // Read the JSON file into a string
-    let mut file = File::open("test_data/lambda_project_testdata_short_with_headerblock.json")?;
-    let mut contents = String::new();
-    file.read_to_string(&mut contents)?;
-
-    // Parse the JSON string into a serde_json::Value
-    let json: Value = serde_json::from_str(&contents)?;
+    // Read input file
+    let input_json: Value = serde_json::from_reader(File::open(input_file)?)?;
 
     // time the flatten_json function
     let start = Instant::now();
 
-    // Flatten the JSON into a HashMap of flattened keys and associated values
-    let mut flat_map: HashMap<String, Value> = HashMap::new();
-    flatten_json(&json, "", &mut flat_map, &b_sparse);
+    // Flatten the JSON object into a HashMap
+    let flattened = flatten_json(input_json, &b_sparse);
 
     let duration = start.elapsed();
 
-    // Convert the HashMap to a serde_json::Value and write it to a file
-    let json_output = json!(flat_map);
-    let mut output_file = File::create("json_hash_output_short_rust.json")?;
-    output_file.write_all(serde_json::to_string_pretty(&json_output)?.as_bytes())?;
+    // Write flattened data to output file
+    let mut output_file = File::create(output_file)?;
+    let output_json = serde_json::to_string(&flattened)?;
+    output_file.write_all(output_json.as_bytes())?;
 
-    println!("duration: {:?}", duration);
+    println!(
+        "Flattened JSON in {} microseconds",
+        duration.as_micros()
+    );
 
     Ok(())
 }
