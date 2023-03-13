@@ -1,3 +1,9 @@
+/*  recursive flattening function
+    processes the json file: test_data/lambda_project_testdata_long.json
+    in 6356 microseconds
+    processes the json file: test_data/lambda_project_testdata_long_allyears.json
+    in 10113 microseconds
+*/
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::prelude::*;
@@ -51,8 +57,7 @@ fn main() -> std::io::Result<()> {
 
     // Read the JSON file into a string
     // let mut file = File::open("test_data/lambda_project_testdata_short_with_headerblock.json")?;
-    let mut file = File::open("/Users/gcattabriga/downloads/2023-03-01_anthem_index.json")?;
-    // let mut file = File::open("test_data/lambda_project_testdata_long.json")?;
+    let mut file = File::open("test_data/lambda_project_testdata_long_allyears.json")?;
     let mut contents = String::new();
 
     // let tabnine complete the following line 
@@ -75,8 +80,7 @@ fn main() -> std::io::Result<()> {
     // Convert the HashMap to a serde_json::Value and write it to a file
     let json_output = json!(flat_map);
     // let mut output_file = File::create("json_hash_output_short_rust.json")?;
-    // let mut output_file = File::create("json_hash_output_long_rust.json")?;
-    let mut output_file = File::create("/Users/gcattabriga/downloads/hashed_2023-03-01_anthem_index.json")?;
+    let mut output_file = File::create("json_hash_output_long_allyears_rust.json")?;
     output_file.write_all(serde_json::to_string_pretty(&json_output)?.as_bytes())?;
 
     println!(
