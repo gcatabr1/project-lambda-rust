@@ -5,7 +5,8 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::time::Instant;
 use serde_json::{json, Value};
-
+use flatteners::flatten_json_recurs;
+use flatteners::flatten_json_nonrecurs;
 
 fn main() -> std::io::Result<()> {
 
@@ -27,7 +28,7 @@ fn main() -> std::io::Result<()> {
     // time the flatten_json_recurs function
     let start = Instant::now();
 
-    flatteners::flatten_json_recurs(&json, "", &mut flat_map, &b_sparse);
+    flatten_json_recurs(&json, "", &mut flat_map, &b_sparse);
 
     let duration = start.elapsed();
 
@@ -50,7 +51,7 @@ fn main() -> std::io::Result<()> {
     let start = Instant::now();
 
     // Flatten the JSON object into a HashMap
-    let flattened = flatteners::flatten_json_nonrecurs(json, &b_sparse);
+    let flattened = flatten_json_nonrecurs(json, &b_sparse);
 
     let duration = start.elapsed();
 
