@@ -5,8 +5,10 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::time::Instant;
 use serde_json::{json, Value};
-use flatteners::flatten_json_recurs;
-use flatteners::flatten_json_nonrecurs;
+use flatteners::{
+    flatten_json_recurs,
+    flatten_json_nonrecurs
+};
 
 fn main() -> std::io::Result<()> {
 
@@ -20,11 +22,13 @@ fn main() -> std::io::Result<()> {
     // Read input file into json structure
     let json: Value = serde_json::from_reader(File::open(input_file)?)?;
 
-
     // Flatten the JSON into a HashMap of flattened keys and associated values
     // Create a flat_map to put the flat hash map into
     let mut flat_map = HashMap::new();
 
+    // -----------------------------------------------------------
+    // RECURSIVE flattening
+    // -----------------------------------------------------------
     // time the flatten_json_recurs function
     let start = Instant::now();
 
@@ -46,7 +50,9 @@ fn main() -> std::io::Result<()> {
         duration.as_micros()
     );
 
-    // now do this non-recursively
+    // -----------------------------------------------------------
+    // NON-RECURSIVE flattening
+    // -----------------------------------------------------------
     // time the flatten_json_nonrecurs function
     let start = Instant::now();
 
