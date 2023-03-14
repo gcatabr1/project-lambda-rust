@@ -38,7 +38,6 @@ fn main() -> std::io::Result<()> {
     let mut output_file_recurs = File::create(output_file_recurs)?;
 
     // let's pretty print the json output
-    output_file_recurs.write_all(json_output.to_string().as_bytes())?;
     output_file_recurs.write_all(serde_json::to_string_pretty(&json_output)?.as_bytes())?;
 
     println!(
@@ -60,7 +59,6 @@ fn main() -> std::io::Result<()> {
     let json_output = json!(flattened);
 
     // let's pretty print the json output
-    output_file_nonrecurs.write_all(json_output.to_string().as_bytes())?;
     output_file_nonrecurs.write_all(serde_json::to_string_pretty(&json_output)?.as_bytes())?;
 
     println!(

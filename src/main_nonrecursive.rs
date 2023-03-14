@@ -71,6 +71,7 @@ fn main() -> std::io::Result<()> {
 
     // Write flattened data to output file
     let mut output_file = File::create(output_file)?;
+    
     let output_json = serde_json::to_string(&flattened)?;
     output_file.write_all(output_json.as_bytes())?;
 
