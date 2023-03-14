@@ -44,25 +44,25 @@ pub fn flatten_json_recurs(value: &Value, index: &str, flat_map: &mut HashMap<St
 
 
 // non recursive flattener
-pub fn flatten_json_nonrecurs(json: Value, b_sparse: &bool) -> HashMap<String, String> {
+pub fn flatten_json_nonrecurs(json: Value, b_sparse: &bool) -> HashMap<String, Value> {
     let mut stack = vec![("".to_owned(), json)];    
-    let mut flattened = HashMap::new();
+    let mut flattened: HashMap<String, Value> = HashMap::new();
 
     while let Some((prefix, json)) = stack.pop() {
         match json {
             Value::Null => {
                 if !b_sparse {
-                    flattened.insert(prefix, "null".to_owned());
+                    flattened.insert(prefix, Value::Null);
                 }
             }
             Value::Bool(b) => {
-                flattened.insert(prefix, b.to_string());
+                flattened.insert(prefix, json!(b));
             }
             Value::Number(n) => {
-                flattened.insert(prefix, n.to_string());
+                flattened.insert(prefix, json!(n));
             }
             Value::String(s) => {
-                flattened.insert(prefix, s.to_owned());
+                flattened.insert(prefix, json!(s));
             }
             Value::Array(arr) => {
                 for (i, val) in arr.into_iter().enumerate() {
