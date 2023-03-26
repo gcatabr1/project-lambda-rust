@@ -96,7 +96,7 @@ if __name__ == "__main__":
     _res = json_hash(_test_json, p_sparse=True)
     _end = time.time()
     # print(f'hashed json: {_res}')
-    print(f'duration: {_end - _start}')
+    print(f'duration in microseconds: {(_end - _start) * 1000000}')
 
     with open('json_hash_output_long_python.json', 'w') as f:
         json.dump(_res, f, indent=2)

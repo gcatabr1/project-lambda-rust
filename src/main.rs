@@ -1,4 +1,6 @@
 // This was hard! 
+// Particullarly the non-recursive vec function. Had to experiment with a lot of different concepts, 
+// of which I still don't fully understand
 // Had to get the derive macro correct in the cargo.toml correct: serde = { version = "1.0.155", features = ["derive"] }
 
 
@@ -6,7 +8,8 @@ mod flatteners;
 
 use std::collections::HashMap;
 use std::fs::File;
-use std::io::prelude::*;
+use std::io::{Write, BufWriter};
+// use std::io::prelude::*;
 use std::time::Instant;
 use serde_json::{json, Value};
 use flatteners::{
@@ -101,11 +104,23 @@ fn main() -> std::io::Result<()> {
     let mut output_file_nonrecurs_vec = File::create(output_file_nonrecurs_vec)?;
 
     // convert the returned vec to a json representation
-    let flattened_json_value = serde_json::to_value(&flattened).unwrap();
-    // let flattened_json_string = serde_json::to_string_pretty(&flattened_json_value).unwrap();
+    // let flattened_json_value = serde_json::to_value(&flattened).unwrap();
 
-    // let's pretty print the json output
-    output_file_nonrecurs_vec.write_all(serde_json::to_string_pretty(&flattened_json_value)?.as_bytes())?;
+    let mut buf_writer = BufWriter::new(&mut output_file_nonrecurs_vec);
+
+    buf_writer.write_all(b"{\n")?;
+
+    for (index, (key, value)) in flattened.iter().enumerate() {
+        let line = format!("  \"{}\": {}", key, value);
+        buf_writer.write_all(line.as_bytes()).expect("Unable to write data to file");
+        if index < flattened.len() - 1 {
+            buf_writer.write_all(b",\n").expect("Unable to write data to file");
+        } else {
+            buf_writer.write_all(b"\n").expect("Unable to write data to file");
+        }
+    }
+
+    buf_writer.write_all(b"}").expect("Unable to write data to file");
 
     println!(
         "Flattened JSON non-recursively using Vec in {} microseconds",

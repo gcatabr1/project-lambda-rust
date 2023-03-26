@@ -1,8 +1,8 @@
 use std::collections::HashMap;
 use serde_json::{json, Value};
-use serde::{Serialize};
+use serde::{Deserialize, Serialize, Serializer};
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Deserialize)]
 pub enum FlatValue {
     Null,
     Bool(bool),
@@ -114,7 +114,7 @@ pub fn flatten_json_nonrecurs_vec(json: Value, b_sparse: &bool) -> Vec<(String, 
             }
             Value::Array(array) => {
                 for (index, value) in array.into_iter().enumerate() {
-                    let new_key = format!("{}[{}]", prefix, index);
+                    let new_key = format!("{}.{}", prefix, index);
                     stack.push((value, new_key));
                 }
             }
@@ -125,6 +125,7 @@ pub fn flatten_json_nonrecurs_vec(json: Value, b_sparse: &bool) -> Vec<(String, 
             }
             Value::Bool(b) => {
                 flattened.push((prefix, FlatValue::Bool(b)));
+
             }
             Value::String(s) => {
                 flattened.push((prefix, FlatValue::String(s)));
@@ -138,4 +139,30 @@ pub fn flatten_json_nonrecurs_vec(json: Value, b_sparse: &bool) -> Vec<(String, 
     }
 
     flattened
+}
+
+
+impl Serialize for FlatValue {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        match self {
+            FlatValue::Null => serializer.serialize_unit(),
+            FlatValue::Bool(b) => serializer.serialize_bool(*b),
+            FlatValue::String(s) => serializer.serialize_str(s),
+            FlatValue::Number(n) => serializer.serialize_f64(*n),
+        }
+    }
+}
+
+impl std::fmt::Display for FlatValue {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            FlatValue::Null => write!(f, "null"),
+            FlatValue::Bool(b) => write!(f, "{}", b),
+            FlatValue::String(s) => write!(f, "\"{}\"", s),
+            FlatValue::Number(n) => write!(f, "{}", n),
+        }
+    }
 }
