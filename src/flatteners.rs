@@ -1,5 +1,14 @@
 use std::collections::HashMap;
 use serde_json::{json, Value};
+use serde::{Serialize};
+
+#[derive(Debug, Serialize)]
+pub enum FlatValue {
+    Null,
+    Bool(bool),
+    String(String),
+    Number(f64),
+}
 
 
 // recursive flattener
@@ -45,6 +54,7 @@ pub fn flatten_json_recurs(value: &Value, index: &str, flat_map: &mut HashMap<St
 
 // non recursive flattener
 pub fn flatten_json_nonrecurs(json: Value, b_sparse: &bool) -> HashMap<String, Value> {
+
     let mut stack = vec![("".to_owned(), json)];    
     let mut flattened: HashMap<String, Value> = HashMap::new();
 
@@ -80,5 +90,52 @@ pub fn flatten_json_nonrecurs(json: Value, b_sparse: &bool) -> HashMap<String, V
             }           
         }
     }
+    flattened
+}
+
+
+// non recursive flattener using vec 
+pub fn flatten_json_nonrecurs_vec(json: Value, b_sparse: &bool) -> Vec<(String, FlatValue)> {
+    let mut flattened = Vec::new();
+    let mut stack = vec![(json, "".to_string())];
+
+    while !stack.is_empty() {
+        let (value, prefix) = stack.pop().unwrap();
+        match value {
+            Value::Object(map) => {
+                for (key, value) in map {
+                    let new_key = if prefix.is_empty() {
+                        key.clone()
+                    } else {
+                        format!("{}.{}", prefix, key)
+                    };
+                    stack.push((value, new_key));
+                }
+            }
+            Value::Array(array) => {
+                for (index, value) in array.into_iter().enumerate() {
+                    let new_key = format!("{}[{}]", prefix, index);
+                    stack.push((value, new_key));
+                }
+            }
+            Value::Null => {
+                if !b_sparse {
+                    flattened.push((prefix, FlatValue::Null));
+                }
+            }
+            Value::Bool(b) => {
+                flattened.push((prefix, FlatValue::Bool(b)));
+            }
+            Value::String(s) => {
+                flattened.push((prefix, FlatValue::String(s)));
+            }
+            Value::Number(num) => {
+                if let Some(n) = num.as_f64() {
+                    flattened.push((prefix, FlatValue::Number(n)));
+                }
+            }
+        }
+    }
+
     flattened
 }
