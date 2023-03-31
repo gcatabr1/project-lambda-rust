@@ -129,7 +129,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "project-lambda"
+name = "projectlambda"
 version = "0.1.0"
 dependencies = [
  "indexmap",

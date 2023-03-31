@@ -1,0 +1,13 @@
+{
+  "contents.0.member_sex": "F",
+  "contents.0.member_id": "member78103",
+  "contents.0.member_age": 8,
+  "contents.0.claim.0.diagnosis_codes.0": "Q6231",
+  "contents.0.claim.0.claim_type": "P",
+  "contents.0.claim.0.claim_line.0.quantity": 1,
+  "contents.0.claim.0.claim_line.0.procedure_code": "99212",
+  "contents.0.claim.0.claim_line.0.line_number": 1,
+  "contents.0.claim.0.claim_line.0.from_date": "2020-04-01",
+  "contents.0.claim.0.claim_line.0.allowed_amount": 79.28,
+  "contents.0.claim.0.claim_id": "claim_22250000"
+}

@@ -12,19 +12,17 @@ use std::io::{Write, BufWriter};
 // use std::io::prelude::*;
 use std::time::Instant;
 use serde_json::{json, Value};
-use flatteners::{
-    flatten_json_recurs,
-    flatten_json_nonrecurs,
-    flatten_json_nonrecurs_vec
-};
 
+use crate::flatteners::recurs::recurs::*;
+use crate::flatteners::nonrecurs_vec::nonrecurs_vec::*;
+use crate::flatteners::nonrecurs::nonrecurs::*;
 
 fn main() -> std::io::Result<()> {
 
-    let input_file = "test_data/lambda_project_testdata_long.json";
-    let output_file_recurs = "json_hash_output_long_recurs_rust.json";  
-    let output_file_nonrecurs = "json_hash_output_long_nonrecurs_rust.json";   
-    let output_file_nonrecurs_vec = "json_hash_output_long_nonrecurs_vec_rust.json";        
+    let input_file = "test_data/lambda_project_testdata_long_allyears.json";
+    let output_file_recurs = "json_hash_output_allyears_recurs_rust.json";  
+    let output_file_nonrecurs = "json_hash_output_allyears_nonrecurs_rust.json";   
+    let output_file_nonrecurs_vec = "json_hash_output_allyears_nonrecurs_vec_rust.json";        
     
     // set the sparse variable: true = no null keys is value is null
     let b_sparse:bool = true;
