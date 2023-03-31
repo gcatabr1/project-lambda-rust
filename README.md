@@ -1,228 +1,127 @@
-<!-- README.md -->
-<!--
-Author: Gary Cattabriga
-Date: 2022.01.29
-*** This is a repo for Opportunity Insights App assets related to CDW
-*** Specifically data ETL (extracts, transformations and loads) from CDW to the OI App
-*** This repo is organized by functional area (ETL) and schema builds
-*** 
-*** Reference links are enclosed in brackets [ ] instead of parentheses
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
 
-<!-- Project logo -->
+<h1 align="center">
+  <br>
+  <a href="https://github.com/gcatabr1/project-lambda-rust/tree/main/images/RustyCrabLambda.png" alt="Crusty Crab" width="200"></a>
+  <br>
+  Rusty JSON Flattener
+  <br>
+</h1>
+
+<h4 align="center">JSON to Hash / Vec (flatteners) in <a href="https://www.rust-lang.org" target="_blank">Rust</a>.</h4>
+
 <p align="center">
-  <a href="https://bitbucket.remedypartners.com/projects/CA/repos/project-lambda/browse"><img src="images/lambda.png" alt="Project Lambda"></a>
+  <a href="https://badge.fury.io/js/electron-markdownify">
+    <img src="https://badge.fury.io/js/electron-markdownify.svg"
+         alt="Gitter">
+  </a>
+  <a href="https://gitter.im/amitmerchant1990/electron-markdownify"><img src="https://badges.gitter.im/amitmerchant1990/electron-markdownify.svg"></a>
+  <a href="https://saythanks.io/to/bullredeyes@gmail.com">
+      <img src="https://img.shields.io/badge/SayThanks.io-%E2%98%BC-1EAEDB.svg">
+  </a>
+  <a href="https://www.paypal.me/AmitMerchant">
+    <img src="https://img.shields.io/badge/$-donate-ff69b4.svg?maxAge=2592000&amp;style=flat">
+  </a>
 </p>
 
-<!-- Title -->
-<div align="center">
-  <h1 style="color:blue;" align="center">Project Lambda</h1>
-</div>
-
-
-<!-- Any shields you want to use. Bitbucket is limited in what you can use -->
 <p align="center">
-  <a href="https://bitbucket.remedypartners.com/projects/CA/repos/gcattabriga/commits">
-  <img src="https://img.shields.io/maintenance/yes/2022?style=plastic"
-  alt="Commits">
-</p>
-
-<!-- The menu links to the various readme sections. Make these whatever works for your project -->      
-<p align="center">
-  <a href="#about">About</a> •  
-  <a href="#test-data">Test Data</a> •  
-  <a href="#code">Code</a> •
+  <a href="#key-features">Key Features</a> •
+  <a href="#how-to-use">How To Use</a> •
+  <a href="#download">Download</a> •
   <a href="#credits">Credits</a> •
-  <a href="#support">Support</a>
+  <a href="#related">Related</a> •
+  <a href="#license">License</a>
 </p>
 
+![screenshot](https://raw.githubusercontent.com/amitmerchant1990/electron-markdownify/master/app/img/markdownify.gif)
 
----
-<!-- ABOUT --> 
-<a name="about"></a>
+## Key Features
 
-## About
+* LivePreview - Make changes, See changes
+  - Instantly see what your Markdown documents look like in HTML as you create them.
+* Sync Scrolling
+  - While you type, LivePreview will automatically scroll to the current location you're editing.
+* GitHub Flavored Markdown  
+* Syntax highlighting
+* [KaTeX](https://khan.github.io/KaTeX/) Support
+* Dark/Light mode
+* Toolbar for basic Markdown formatting
+* Supports multiple cursors
+* Save the Markdown preview as PDF
+* Emoji support in preview :tada:
+* App will keep alive in tray for quick usage
+* Full screen mode
+  - Write distraction free.
+* Cross platform
+  - Windows, macOS and Linux ready.
 
-A **NEW** repo for **Project Lambda** 
+## How To Use
 
-<br/>
+To clone and run this application, you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
 
-<!-- CONTAINER --> 
-<a name="test-data"></a>
+```bash
+# Clone this repository
+$ git clone https://github.com/amitmerchant1990/electron-markdownify
 
-## Test Data
-Test data consists of 11 randomly selected members and associated 2020 claims (based on admission_date)
-- 10 members consist of only Facility (I) and Professional (P) claims, 
-- 1 member includes I, P and Pharmacy (R) claims 
+# Go into the repository
+$ cd electron-markdownify
 
-| member\_id | claimtype | clm\_cnt | line\_cnt |
-| :--- | :--- | :--- | :--- |
-| member33500 | I | 1 | 8 |
-| member33500 | P | 29 | 57 |
-| member33500 | R | 62 | 62 |
-| member36600 | I | 3 | 30 |
-| member36600 | P | 45 | 60 |
-| member37800 | P | 5 | 11 |
-| member58401 | I | 4 | 26 |
-| member58401 | P | 33 | 70 |
-| member64200 | I | 5 | 8 |
-| member64200 | P | 30 | 76 |
-| member66500 | P | 13 | 18 |
-| member74200 | P | 6 | 18 |
-| member75802 | P | 7 | 12 |
-| member78103 | I | 1 | 1 |
-| member78103 | P | 3 | 4 |
-| member85401 | I | 3 | 10 |
-| member85401 | P | 3 | 4 |
-| member88101 | I | 3 | 18 |
-| member88101 | P | 12 | 13 |
+# Install dependencies
+$ npm install
 
-
-*note:*
-- The test data can be found in CDW here: test.pl_sample_claims
-- The SQL that produces the JSON can be found [in this repo](https://bitbucket.remedypartners.com/projects/CA/repos/project-lambda/browse/test_data/lambda_project_testdata_json.sql)
-
-<br/>
-
-#### JSON test data files
-Three test JSON claims files of various lengths have been created:
-1. **lambda_project_testdata_short.json**  -- (member78103, member85401)
-2. **lambda_project_testdata_medium.json**  -- (member33500, member78103, member85401)
-3. **lambda_project_testdata_long.json** -- (all members)
-
-
-*partial example of lambda_project_testdata_short.json:*
-```
-{
-    "contents":[
-       {
-          "member_id":"member78103",
-          "member_age":8,
-          "member_sex":"F",
-          "claim":[
-             {
-                "claim_id":"claim_22250000",
-                "claim_type":"P",
-                "type_of_bill":null,
-                "admission_date":"2020-04-01",
-                "discharge_date":"2020-04-01",
-                "taxonomy_code":"2088P0231X",
-                "place_of_service":2,
-                "principle_diagnosis":"Q6231",
-                "diagnosis_codes":[
-                   "Q6231",
-                   null,
-                   null,
-                   null,
-                   null,
-                   null,
-                   null,
-                   null,
-                   null,
-                   null
-                ],
-                "drg":null,
-                "drg_severity":null,
-                "drg_type":null,
-                "claim_line":[
-                   {
-                      "line_number":1,
-                      "from_date":"2020-04-01",
-                      "thru_date":"2020-04-01",
-                      "revenue_code":null,
-                      "procedure_code":"99212",
-                      "ndc_code":null,
-                      "quantity":1,
-                      "allowed_amount":79.2000000000000028
-                   }
-                ]
-             },
-             {
-                "claim_id":"claim_39033600",
-                "claim_type":"P",
-                "type_of_bill":null,
-                "admission_date":"2020-01-03",
-                "discharge_date":"2020-01-03",
-                "taxonomy_code":"363L00000X",
-                "place_of_service":20,
-                "principle_diagnosis":"J209",
-                "diagnosis_codes":[
-                   "J209",
-                   "J029",
-                   null,
-                   null,
-                   null,
-                   null,
-                   null,
-                   null,
-                   null,
-                   null
-                ],
-                "drg":null,
-                "drg_severity":null,
-                "drg_type":null,
-                "claim_line":[
-                   {
-                      "line_number":1,
-                      "from_date":"2020-01-03",
-                      "thru_date":"2020-01-03",
-                      "revenue_code":null,
-                      "procedure_code":"99214",
-                      "ndc_code":null,
-                      "quantity":1,
-                      "allowed_amount":158.560000000000002
-                   },
-                   {
-                      "line_number":2,
-                      "from_date":"2020-01-03",
-                      "thru_date":"2020-01-03",
-                      "revenue_code":null,
-                      "procedure_code":"87880",
-                      "ndc_code":null,
-                      "quantity":1,
-                      "allowed_amount":6.61000000000000032
-                   }
-                ]
-             },
-...
+# Run the app
+$ npm start
 ```
 
+> **Note**
+> If you're using Linux Bash for Windows, [see this guide](https://www.howtogeek.com/261575/how-to-run-graphical-linux-desktop-applications-from-windows-10s-bash-shell/) or use `node` from the command prompt.
 
 
-<br/><br/>
+## Download
 
+You can [download](https://github.com/amitmerchant1990/electron-markdownify/releases/tag/v1.2.0) the latest installable version of Markdownify for Windows, macOS and Linux.
 
+## Emailware
 
-<!-- Build Schema and Initialize --> 
-<a name="code"></a>
-
-## Code
-
-
-
-<br/><br/>
-
-
-
-<!-- CREDITS or ACKNOWLEDGEMENTS -->
-<a name="credits"></a>
+Markdownify is an [emailware](https://en.wiktionary.org/wiki/emailware). Meaning, if you liked using this app or it has helped you in any way, I'd like you send me an email at <bullredeyes@gmail.com> about anything you'd want to say about this software. I'd really appreciate it!
 
 ## Credits
 
-| [![Community](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcnTCrjKmRCJDwebeZdr5iVQ_9QFHwtLEJsQ&usqp=CAU)](https://confluence.remedypartners.com/display/OA/Commercial+Analytics+Engineering)		|
-|:---------------------------------------------------------------------------------------------------------:	|:------------------------------------------------------------------------------------------------------------------------------------------------:
-|   **Opportunity Insights App Developemt Team!**                         			                          	    |
-<br/><br/>
+This software uses the following open source packages:
 
-<!-- SUPPORT -->
-<a name="support"></a>
+- [Electron](http://electron.atom.io/)
+- [Node.js](https://nodejs.org/)
+- [Marked - a markdown parser](https://github.com/chjj/marked)
+- [showdown](http://showdownjs.github.io/showdown/)
+- [CodeMirror](http://codemirror.net/)
+- Emojis are taken from [here](https://github.com/arvida/emoji-cheat-sheet.com)
+- [highlight.js](https://highlightjs.org/)
+
+## Related
+
+[markdownify-web](https://github.com/amitmerchant1990/markdownify-web) - Web version of Markdownify
 
 ## Support
 
-Reach out at one of the following places:
+<a href="https://www.buymeacoffee.com/5Zn8Xh3l9" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/purple_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
 
-- Slack Channel: 
-- E-Mail: 
+<p>Or</p> 
+
+<a href="https://www.patreon.com/amitmerchant">
+	<img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
+</a>
+
+## You may also like...
+
+- [Pomolectron](https://github.com/amitmerchant1990/pomolectron) - A pomodoro app
+- [Correo](https://github.com/amitmerchant1990/correo) - A menubar/taskbar Gmail App for Windows and macOS
+
+## License
+
+MIT
+
+---
+
+> [amitmerchant.com](https://www.amitmerchant.com) &nbsp;&middot;&nbsp;
+> GitHub [@amitmerchant1990](https://github.com/amitmerchant1990) &nbsp;&middot;&nbsp;
+> Twitter [@amit_merchant](https://twitter.com/amit_merchant)
+
