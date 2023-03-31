@@ -25,7 +25,7 @@
   <a href="#license">License</a>
 </p>
 
-![screenshot](https://raw.githubusercontent.com/amitmerchant1990/electron-markdownify/master/app/img/markdownify.gif)
+![screenshot](https://github.com/gcatabr1/project-lambda-rust/blob/main/images/flattened.png)
 
 ## Key Features
 
