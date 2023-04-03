@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="https://img.shields.io/badge/maintained-yes-blue"></a>
-    <img src="https://img.shields.io/badge/maintained-yes-blue" alt="maintained - yes">
+    <img src="https://img.shields.io/badge/maintained-no-blue" alt="maintained - yes">
   </a>
   <a href="https://www.rust-lang.org/" title="Go to Rust homepage"><img src="https://img.shields.io/badge/Rust-1-blue?logo=rust&logoColor=white" alt="Made with Rust"></a>
 </p>
