@@ -61,7 +61,7 @@ To run the code, first clone the repository and then perform any of the followin
 ```
 
 ```
-# if you want to the tests
+# if you want to execute the tests
 > cargo run test
 ```
 
