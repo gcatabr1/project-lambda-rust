@@ -31,7 +31,7 @@
 
 ## Key Features
 
-This repo is my attempt to learn Rust - by adapting an existing [hashing] algorithm coded up in Python. To learn Rust language basics, using Cargo and tests; as well compare performance to Python.
+This repo is my attempt to learn Rust - by adapting an existing [hashing] algorithm coded up in Python. To learn Rust language basics, how to use and configure Cargo, organizing your dev folders and create and run tests; as well compare Rust performance to Python.
 
 The main function runs each of the functions using one of the test_data JSON files and then prints out the duration of each function in microseconds (see image above).
 
