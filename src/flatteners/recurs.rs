@@ -7,30 +7,36 @@ pub mod recurs {
     // recursive flattener
     pub fn flatten_json_recurs(value: &Value, index: &str, flat_map: &mut HashMap<String, Value>, b_sparse: &bool) {
         match value {
+            // value is null, so depending on the b_sparse parameter, it will either insert a null value or just return
             Value::Null => {
                 if !b_sparse {
                     let key = format!("{}", index);
                     flat_map.insert(key, Value::Null);
                 }
             }
+            // value is boolean
             Value::Bool(val) => {
                 let key = format!("{}", index);
                 flat_map.insert(key, json!(*val));
             }
+            // value is a number, so insert it as a number
             Value::Number(val) => {
                 let key = format!("{}", index);
                 flat_map.insert(key, json!(val));
             }
+            // value is a string, so insert string
             Value::String(val) => {
                 let key = format!("{}", index);
                 flat_map.insert(key, json!(val));
             }
+            // value is an array / list, so need to recurse 
             Value::Array(arr) => {
                 for (i, v) in arr.iter().enumerate() {
                     let idx = format!("{}.{}", index, i);
                     flatten_json_recurs(v, &idx, flat_map, &b_sparse);
                 }
             }
+            // value is another dictionary, so need to recurse 
             Value::Object(obj) => {
                 for (k, v) in obj.iter() {
                     let idx = if index.is_empty() {

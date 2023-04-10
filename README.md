@@ -50,32 +50,30 @@ About the 3 algorithms, which are all variants of each other:
 
 To run the code, first clone the repository and then perform any of the following:
 
-```
+```bash
 # fastest way to just see the output
 > cargo run
 ```
 
-```
+```bash
 # if you want to see the functions run in release mode
 > cargo run -r
 ```
 
-```
+```bash
 # if you want to execute the tests
 > cargo run test
 ```
 
-
 > **Note**
-> If you want to try other test_data JSON, then change the first assignment line in main() to a dataset in the test_data folder. And if needed, change the output file names in the next 3 lines
+> If you want to try other test_data JSONs, then change the first assignment line in main() to a dataset in the test_data folder. And if needed, change the output file names in the next 3 lines
+
 ```
 let input_file = "test_data/lambda_project_testdata_long_allyears.json";</br>
 let output_file_recurs = "json_hash_output_allyears_recurs_rust.json";
 let output_file_nonrecurs = "json_hash_output_allyears_nonrecurs_rust.json";
 let output_file_nonrecurs_vec = "json_hash_output_allyears_nonrecurs_vec_rust.json";
 ```
-    
-
 
 ## Credits
 
@@ -85,15 +83,10 @@ This software uses the following open source packages:
 
 ## Related
 
-
-
 ## Support
-
 
 ## License
 
 MIT
 
 ---
-
-
